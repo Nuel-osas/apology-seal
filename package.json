@@ -1,0 +1,37 @@
+{
+  "name": "apology-seal",
+  "version": "1.0.0",
+  "description": "Sealed apology implementation using Sui Seal technology",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "send": "npm run build && node dist/sendApology.js",
+    "decrypt": "npm run build && node dist/decryptApology.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@mysten/seal": "^0.4.24",
+    "@mysten/sui": "^1.0.0",
+    "@mysten/bcs": "^1.0.0",
+    "@noble/curves": "^1.4.0",
+    "@noble/hashes": "^1.4.0",
+    "dotenv": "^16.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.11",
+    "ts-jest": "^29.1.2"
+  },
+  "keywords": [
+    "sui",
+    "seal",
+    "encryption",
+    "blockchain",
+    "move"
+  ],
+  "author": "",
+  "license": "MIT"
+}

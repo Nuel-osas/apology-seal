@@ -8,9 +8,9 @@ import { Lock, Unlock, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 // Pre-filled credentials from your successful creation
 const APOLOGY_CREDENTIALS = {
-  apologyId: '0xfc1f77c216d0d30c58f9894a18259602a7805d60c890263a756b874567d2321c',
-  documentId: 'fc1f77c216d0d30c58f9894a18259602a7805d60c890263a756b874567d2321c4ba4cda6ada1c084d5b3b325f8521d3a',
-  walrusBlobId: '87KPFTzYY5Tei83hfRHsUFK4Jjc1osEL_1H0G1ArPp8',
+  apologyId: '0x358a0cf28ceab98687a8bbb073a933c3f83640567ac3d6c5bee242f02772fad6',
+  documentId: '358a0cf28ceab98687a8bbb073a933c3f83640567ac3d6c5bee242f02772fad6e8a75a664a5b66732fe7a82952f16635',
+  walrusBlobId: 'kCSV7k3ZuduNWnhvtgdZUKenD7fbeFmetwm0_CsgB_c',
   recipients: {
     bl: '0x0760564b88d4d86026aec8c4b0ca695187174ac8138cb9e9a37c7837546039cb',
     kotaro: '0x10eefc7a3070baa5d72f602a0c89d7b1cb2fcc0b101cf55e6a70e3edb6229f8b',
@@ -54,11 +54,11 @@ export default function DecryptPage() {
       // Create a signer object that uses the wallet hooks
       const walletSigner = {
         getAddress: () => account.address,
-        signPersonalMessage: (args: { message: string }) => {
+        signPersonalMessage: (args: { message: Uint8Array }) => {
           return new Promise((resolve, reject) => {
             signPersonalMessage(
               {
-                message: args.message, // Pass the message string directly
+                message: args.message,
               },
               {
                 onSuccess: (result) => {

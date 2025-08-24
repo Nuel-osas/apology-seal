@@ -85,7 +85,7 @@ export class SealedApologyWebService {
     const { encryptedObject, key } = await this.sealClient.encrypt({
       threshold: 1,
       packageId: CONFIG.packageId,
-      id: documentId,
+      id: documentId as any, // Document ID as string
       data: messageBytes,
     });
 
@@ -120,21 +120,29 @@ export class SealedApologyWebService {
     });
 
     // Sign the personal message with wallet
-    // Pass the message string directly, not as bytes
-    const message = sessionKey.getPersonalMessage();
-    console.log('Personal message to sign:', message);
+    const messageBytes = sessionKey.getPersonalMessage(); // This already returns Uint8Array
+    console.log('Personal message bytes:', messageBytes);
+    console.log('Message type:', typeof messageBytes);
+    console.log('Message length:', messageBytes.length);
     
     const signatureResult = await signer.signPersonalMessage({
-      message: message, // Pass the string directly, not encoded bytes
+      message: messageBytes,
     });
     
     console.log('Full signature result:', signatureResult);
+    console.log('Signature result type:', typeof signatureResult);
+    console.log('Result has bytes:', 'bytes' in signatureResult);
+    console.log('Result has signature:', 'signature' in signatureResult);
     
-    // The wallet returns an object with 'signature' property
-    const signature = signatureResult.signature || signatureResult;
+    // The wallet returns an object with bytes and signature properties
+    // signature is already in base64 format
+    const signature = signatureResult.signature;
     
     console.log('Using signature:', signature);
+    console.log('Signature type:', typeof signature);
+    console.log('Signature starts with 0x:', signature.startsWith('0x'));
     
+    // SessionKey expects the signature in base64 format (which it already is)
     await sessionKey.setPersonalMessageSignature(signature);
     console.log('Signature set successfully');
 
@@ -173,7 +181,7 @@ export class SealedApologyWebService {
   private async uploadToWalrus(data: Uint8Array): Promise<string> {
     const response = await fetch(`${CONFIG.walrusApiUrl}/v1/blobs?epochs=1`, {
       method: 'PUT',
-      body: data,
+      body: data as any,
       headers: {
         'Content-Type': 'application/octet-stream',
       },

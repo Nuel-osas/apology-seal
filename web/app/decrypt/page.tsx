@@ -8,13 +8,25 @@ import { Lock, Unlock, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 // Pre-filled credentials from your successful creation
 const APOLOGY_CREDENTIALS = {
-  apologyId: '0x358a0cf28ceab98687a8bbb073a933c3f83640567ac3d6c5bee242f02772fad6',
-  documentId: '358a0cf28ceab98687a8bbb073a933c3f83640567ac3d6c5bee242f02772fad6e8a75a664a5b66732fe7a82952f16635',
-  walrusBlobId: 'kCSV7k3ZuduNWnhvtgdZUKenD7fbeFmetwm0_CsgB_c',
-  recipients: {
-    bl: '0x0760564b88d4d86026aec8c4b0ca695187174ac8138cb9e9a37c7837546039cb',
-    kotaro: '0x10eefc7a3070baa5d72f602a0c89d7b1cb2fcc0b101cf55e6a70e3edb6229f8b',
-  },
+  apologyId: '0x522f9b42f4889888f0a04c20bfcc31bdf1f4b4149f39423731b3b708bf639c69',
+  documentId: '522f9b42f4889888f0a04c20bfcc31bdf1f4b4149f39423731b3b708bf639c69c29a4ed61f2fc69c4b915083bda9b233',
+  walrusBlobId: 'PVKZoiAoy1ZhrkdAv8VsIX7_dkrHYg_4cZ4JHmY35Fg',
+  authorizedAddresses: [
+    '0x0760564b88d4d86026aec8c4b0ca695187174ac8138cb9e9a37c7837546039cb', // BL
+    '0x10eefc7a3070baa5d72f602a0c89d7b1cb2fcc0b101cf55e6a70e3edb6229f8b', // Kotaro
+    '0x2fee8b921747f0ddf937e1257391884173bebc32825480e1430dbb2907a18026',
+    '0x6a5fe7731a01499dbf6342c25bb75f44075cb7c2e9f48a9261803282b71aa513',
+    '0x4679f739928f66a75ff9e17c33c433787aea276532aabc068b715d4a2edc1106',
+    '0xa87ee0779d1ddca72a99f625d1e3ce8ad1279ddd1aa088fe6ea1a1bb935f113b',
+    '0x05fd9cd1c5716d140ab8be7e50804d39b1f79f960d4c66673fa4cc763c976802',
+    '0x6b57a3674949834249d415c18ed5fabe7ca797845d66aabc1d280e1e2d6b750d',
+    '0xedc61d3148fc2222f95b4a73c6312b0702e2b74517bf75938d535d2431e608ce',
+    '0x3938fb19c176ac27f4646f14112d38490f57717a7cced463689890e1a1ff9d0f',
+    '0x9a91d62162ce669a71e2d8318168a89e9a37d21c710fe76182bc747026dd4027',
+    '0x98a945d6523ba0b4685c4d50d0449c811fded93ad7a20cf2d61af6a6fd4d4d0b',
+    '0x017513c60805b1a3b8ec2cdf9e4d7bad60dff1dd13da26665ba9ca0e542371d1',
+    '0xc6348ec469793ec2178860a7ac327843424062668cef3911b813e504b70f6994',
+  ],
 };
 
 export default function DecryptPage() {
@@ -27,9 +39,7 @@ export default function DecryptPage() {
 
   useEffect(() => {
     if (account) {
-      const authorized = 
-        account.address === APOLOGY_CREDENTIALS.recipients.bl ||
-        account.address === APOLOGY_CREDENTIALS.recipients.kotaro;
+      const authorized = APOLOGY_CREDENTIALS.authorizedAddresses.includes(account.address);
       setIsAuthorized(authorized);
     } else {
       // Reset states when wallet disconnects
@@ -86,7 +96,7 @@ export default function DecryptPage() {
     } catch (err: any) {
       console.error('Decryption error:', err);
       if (err.message?.includes('NOT_AUTHORIZED') || err.message?.includes('not in allowlist')) {
-        setError('You are not authorized to decrypt this apology. Only BL and Kotaro can access it.');
+        setError('You are not authorized to decrypt this apology. Only the 14 authorized recipients can access it.');
       } else if (err.message?.includes('EXPIRED')) {
         setError('This apology has expired.');
       } else {
@@ -320,14 +330,50 @@ export default function DecryptPage() {
                   padding: '20px',
                   border: '1px solid rgba(255, 255, 255, 0.05)'
                 }}>
-                  <p style={{ 
+                  <div style={{ 
                     fontSize: '15px',
                     lineHeight: '1.8',
                     color: 'rgba(255, 255, 255, 0.85)',
                     whiteSpace: 'pre-wrap'
                   }}>
-                    {decryptedMessage}
-                  </p>
+                    {decryptedMessage?.split('\n').map((line, index) => {
+                      // Check if the line contains a URL
+                      const urlRegex = /(https?:\/\/[^\s]+)/g;
+                      const parts = line.split(urlRegex);
+                      
+                      return (
+                        <div key={index}>
+                          {parts.map((part, partIndex) => {
+                            if (part.match(urlRegex)) {
+                              return (
+                                <a
+                                  key={partIndex}
+                                  href={part}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={{
+                                    color: '#60a5fa',
+                                    textDecoration: 'underline',
+                                    cursor: 'pointer',
+                                    transition: 'color 0.2s',
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.color = '#93c5fd';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.color = '#60a5fa';
+                                  }}
+                                >
+                                  {part}
+                                </a>
+                              );
+                            }
+                            return <span key={partIndex}>{part}</span>;
+                          })}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
                 
                 <div style={{ 
@@ -392,9 +438,10 @@ export default function DecryptPage() {
                 <p>Apology ID: {APOLOGY_CREDENTIALS.apologyId}</p>
                 <p style={{ marginTop: '4px' }}>Walrus Blob: {APOLOGY_CREDENTIALS.walrusBlobId}</p>
                 <p style={{ marginTop: '4px' }}>Document ID: {APOLOGY_CREDENTIALS.documentId.substring(0, 20)}...</p>
-                <p style={{ marginTop: '12px' }}>Recipients:</p>
-                <p style={{ marginLeft: '16px' }}>BL: {APOLOGY_CREDENTIALS.recipients.bl}</p>
-                <p style={{ marginLeft: '16px' }}>Kotaro: {APOLOGY_CREDENTIALS.recipients.kotaro}</p>
+                <p style={{ marginTop: '12px' }}>Total Authorized Recipients: 14</p>
+                <p style={{ marginTop: '4px', fontSize: '11px', color: 'rgba(255, 255, 255, 0.4)' }}>
+                  BL, Kotaro, and 12 additional recipients can decrypt this message
+                </p>
               </div>
             </details>
           </div>

@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "send": "npm run build && node dist/sendApology.js",
+    "send-multiple": "npm run build && node dist/sendApologyMultiple.js",
     "decrypt": "npm run build && node dist/decryptApology.js",
     "test": "jest"
   },

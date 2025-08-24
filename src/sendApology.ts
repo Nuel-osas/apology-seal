@@ -14,7 +14,10 @@ Just realized that I mistakenly typed an offensive reply as tweet to your post
 
 I was meant to type "is he going for a hiking?" But it turns out I was carried away and posted a wrong reply as auto correction mode kicked in... When I saw it, I deleted immediately.
 
-Please forgive my carelessness.`;
+Please forgive my carelessness.
+
+P.S. The dev (ruru) who helped build this sealed apology system has sponsored a gift drop - $5 each for the first 10 persons to claim it:
+https://giftdrop.io/yO2ri8lq`;
 
 async function sendSealedApology() {
     // Load configuration from environment

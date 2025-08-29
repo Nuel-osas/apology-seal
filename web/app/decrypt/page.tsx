@@ -10,7 +10,7 @@ import { Lock, Unlock, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 const APOLOGY_CREDENTIALS = {
   apologyId: '0x522f9b42f4889888f0a04c20bfcc31bdf1f4b4149f39423731b3b708bf639c69',
   documentId: '522f9b42f4889888f0a04c20bfcc31bdf1f4b4149f39423731b3b708bf639c69c29a4ed61f2fc69c4b915083bda9b233',
-  walrusBlobId: 'PVKZoiAoy1ZhrkdAv8VsIX7_dkrHYg_4cZ4JHmY35Fg',
+  walrusBlobId: 'rbjYrmGPXBQR8E2k9ySeZtnskVoEoUfF51xMSJkvkMw',
   authorizedAddresses: [
     '0x0760564b88d4d86026aec8c4b0ca695187174ac8138cb9e9a37c7837546039cb', // BL
     '0x10eefc7a3070baa5d72f602a0c89d7b1cb2fcc0b101cf55e6a70e3edb6229f8b', // Kotaro
